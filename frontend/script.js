@@ -97,4 +97,6 @@ function updateEmployee(employeeId) {
   })
   .then(response => response.json())
   .then(() => location.reload());
+  console.log(JSON.stringify({ name, email, number }));
+
 }
