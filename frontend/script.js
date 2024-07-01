@@ -110,7 +110,7 @@ function updateEmployee(employeeId) {
   }
 
   // Envío de la solicitud para actualizar el empleado
-  fetch('http://127.0.0.1:5000/employee/${employeeId}', {
+  fetch(`http://127.0.0.1:5000/employee/${employeeId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, number })
