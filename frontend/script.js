@@ -86,17 +86,49 @@ function deleteEmployee(employeeId) {
 }
 
 function updateEmployee(employeeId) {
-  const name = prompt("nuevo name:");
-  const email = prompt("nuevo email:");
-  const number = prompt("nuevo telefono:");
+  const name = prompt("Nuevo nombre:");
+  const email = prompt("Nuevo email:");
+  const number = prompt("Nuevo teléfono:");
 
+  // Validación de las entradas
+  const nameRegex = /^[A-Za-z\s]+$/;
+  if (!nameRegex.test(name)) {
+    alert("El nombre solo debe contener letras y espacios.");
+    return;
+  }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!emailRegex.test(email)) {
+    alert("El email debe terminar en @gmail.com.");
+    return;
+  }
+
+  const numberRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!numberRegex.test(number)) {
+    alert("El teléfono debe tener el formato YYYY-MM-DD.");
+    return;
+  }
+
+  // Envío de la solicitud para actualizar el empleado
   fetch(`http://127.0.0.1:5000/employee/${employeeId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, number })
   })
-  .then(response => response.json())
-  .then(() => location.reload());
-  console.log(JSON.stringify({ name, email, number }));
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Error al actualizar el empleado');
+      }
+      return response.json();
+  })
+  .then(() => {
+      alert('Empleado actualizado exitosamente');
+      location.reload();
+  })
+  .catch(error => {
+      console.error('Hubo un problema con la operación de actualización:', error);
+      alert('Hubo un problema al actualizar el empleado.');
+  });
 
+  console.log(JSON.stringify({ name, email, number }));
 }
