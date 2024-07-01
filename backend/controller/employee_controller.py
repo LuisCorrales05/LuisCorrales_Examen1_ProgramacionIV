@@ -29,11 +29,15 @@ def get_employee(employee_id):
 
 @employee_blueprint.route('/<int:employee_id>', methods=['PUT'])
 def update_employee(employee_id):
-    name = request.form['name']
-    email = request.form['email']
-    number = request.form['number']
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    number = data.get('number')
+
+    if not name or not email or not number:
+        return jsonify({'status': 'error', 'message': 'Invalid input data'}), 400
+    
     employee = employee_service.update_employee(employee_id, name, email, number)
-    print(employee)
     if employee:
         return jsonify(employee.serialize())
     return jsonify({'status': 'error', 'message': 'Employee not found'}), 404
